@@ -48,7 +48,7 @@ if DEBUG:
 else:
     SECRET_KEY = env.get_value('PORD_SECRET_KEY')
 
-
+# Nassim: made it if DEBUG instead of NOT debug for prod testing
 if not DEBUG and cloud_platform in ['DIGITAL_OCEAN', 'RAILWAY']:
     # since the firebase-cred cannot be uploaded manually 
     # https://www.digitalocean.com/community/questions/how-to-upload-a-secret-credential-file
