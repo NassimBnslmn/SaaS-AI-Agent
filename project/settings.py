@@ -35,7 +35,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 NPM_BIN_PATH = "C:\\Program Files\\nodejs\\npm.cmd"
 
-cloud_platform = os.environ.setdefault('CLOUD_PLATFORM', '')
+cloud_platform = os.environ.setdefault('CLOUD_PLATFORM', 'RAILWAY')
 
 FIREBASE_CRED_PATH = env('FIREBASE_CRED_PATH')
 
