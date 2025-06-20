@@ -39,29 +39,4 @@
     </main>
 
   </body>
-  {% comment %} <script src="{% static "./js/base.js" %}"></script> {% endcomment %}
-  <script>
-      // Timezone settings
-      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // e.g. "America/New_York"
-      document.cookie = "user_timezone=" + timezone;
-    </script>
-    {% comment %} <script src="https://unpkg.com/quill-paste-smart@latest/dist/quill-paste-smart.js"></script> {% endcomment %}
-
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.1/dist/browser-image-compression.js"></script>
-
-    <script>
-        const STATIC_URL = "{% settings_value 'STATIC_URL' %}" 
-    </script>
-
-    <script src="{% static './js/utils/elements.js' %}"></script>
-    <script src="{% static './js/utils/common.js' %}"></script>
-    <script src="{% static './js/utils/images.js' %}"></script>
-    <script src="{% static './js/utils/constants.js' %}"></script>
-
-    <script src="{% static './js/base.js' %}"></script>
-
-    {% block scripts %}{% endblock scripts %}
-
-
 </html>

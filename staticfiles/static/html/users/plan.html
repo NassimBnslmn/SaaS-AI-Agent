@@ -1,0 +1,63 @@
+{% extends "users/base_user.html" %}
+
+{% block title %}Abonnement{% endblock title %}
+{% block description %}Choisissez ou modifiez votre abonnement{% endblock description %}
+
+{% block content %}
+<div class="tw-flex tw-flex-col tw-gap-2 tw-p-4 tw-mt-8 tw-place-content-center tw-place-items-center">
+    <h1 class="tw-text-5xl">Plans et abonnements</h1>
+    <div class="tw-mt-3 tw-text-gray-600">
+        Gérez votre abonnement actuel ou choisissez un nouveau plan.
+    </div>
+</div>
+
+<section class="tw-min-h-[60vh] tw-flex tw-mt-6 tw-gap-6 tw-place-content-center max-md:tw-flex-col tw-place-items-center">
+
+    {% for plan in plans %}
+    <form action="{% url 'create-payment' %}" method="POST" class="tw-w-[320px]">
+        {% csrf_token %}
+        <div class="tw-rounded-lg tw-shadow-xl tw-min-h-[460px] tw-flex tw-flex-col tw-p-6
+            {% if active_plan and plan.id == active_plan.id %}
+                tw-border-4 tw-border-blue-600 tw-bg-blue-50
+            {% else %}
+                tw-bg-white
+            {% endif %}
+            tw-transition tw-duration-300 tw-hover:tw-shadow-2xl
+        ">
+            <h2 class="tw-text-4xl tw-font-semibold tw-text-gray-900">{{ plan.name }}</h2>
+            <h3 class="tw-text-3xl tw-mt-2 tw-font-bold tw-text-gray-800">${{ plan.price|stringformat:'d' }}</h3>
+            
+            <ul class="tw-flex tw-flex-col tw-gap-3 tw-text-lg tw-mt-5 tw-mb-6 tw-text-gray-700">
+                {% for feature in plan.features_as_list %}
+                <li class="tw-flex tw-items-center">
+                    <i class="bi bi-check-circle-fill tw-text-green-600 tw-mr-2"></i> {{ feature }}
+                </li>
+                {% endfor %}
+            </ul>
+            
+            <input type="hidden" name="plan" value="{{ plan.id }}">
+
+            {% if active_plan and plan.id == active_plan.id %}
+                <button disabled class="btn tw-bg-gray-400 tw-cursor-not-allowed tw-text-white tw-py-2 tw-rounded-md">
+                    Abonnement actif
+                </button>
+                <button formaction="" class="btn tw-mt-3 tw-bg-red-600 hover:tw-bg-red-700 tw-text-white tw-py-2 tw-rounded-md">
+                    Annuler l'abonnement
+                </button>
+            {% else %}
+                <button type="submit" class="btn tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-py-2 tw-rounded-md">
+                    {% if active_plan and plan.price > active_plan.price %}
+                        Passer à ce plan
+                    {% elif active_plan %}
+                        Changer pour ce plan
+                    {% else %}
+                        S'abonner
+                    {% endif %}
+                </button>
+            {% endif %}
+        </div>
+    </form>
+    {% endfor %}
+
+</section>
+{% endblock content %}

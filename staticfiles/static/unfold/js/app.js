@@ -8,43 +8,7 @@ window.addEventListener("load", (e) => {
   renderCharts();
 
   filterForm();
-
-  warnWithoutSaving();
 });
-
-/*************************************************************
- * Warn without saving
- *************************************************************/
-const warnWithoutSaving = () => {
-  let formChanged = false;
-  const form = document.querySelector("form.warn-unsaved-form");
-
-  const checkFormChanged = () => {
-    const elements = document.querySelectorAll(
-      "form.warn-unsaved-form input, form.warn-unsaved-form select, form.warn-unsaved-form textarea"
-    );
-
-    Array.from(elements).forEach((field) => {
-      field.addEventListener("input", (e) => (formChanged = true));
-    });
-  };
-
-  if (!form) {
-    return;
-  }
-
-  new MutationObserver((mutationsList, observer) => {
-    checkFormChanged();
-  }).observe(form, { attributes: true, childList: true, subtree: true });
-
-  checkFormChanged();
-
-  window.addEventListener("beforeunload", (e) => {
-    if (formChanged) {
-      e.preventDefault();
-    }
-  });
-};
 
 /*************************************************************
  * Filter form
