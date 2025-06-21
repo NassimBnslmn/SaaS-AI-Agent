@@ -80,6 +80,10 @@ class User(AbstractBaseUser, PermissionsMixin):
     objects = CustomUserManager()
     activeusers_manager = ActiveUsersManager()
 
+    access_token = models.CharField(max_length=255, null=True, blank=True)
+    refresh_token = models.CharField(max_length=255, null=True, blank=True)
+    token_expiry = models.DateTimeField(null=True, blank=True)  # optionnel, pour gérer expiration
+
 
     USERNAME_FIELD = 'email' 
 

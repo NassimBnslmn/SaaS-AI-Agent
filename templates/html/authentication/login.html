@@ -4,6 +4,7 @@
 {% load tz %}
 {% load static %}
 
+{% load socialaccount %}
 
 
 {% block title %}Login{% endblock title %}
@@ -52,8 +53,10 @@
                 <div>
                     Don't have an account? <a href="{% url "signup" %}" class="tw-text-blue-500">Signup</a>
                 </div>
-
+<a href="{% provider_login_url 'google' process='login' %}">Se connecter avec Google</a>
         </form>
+
+
 
     </div>
 {% endblock content %}

@@ -99,6 +99,14 @@ INSTALLED_APPS = [
     'django.contrib.sitemaps',  # sitemaps 
     'django.contrib.humanize',
 
+    "allauth_ui",
+
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+    'allauth.socialaccount.providers.google',
+    "widget_tweaks",
+    "slippers",
 
     # 3rd party
     'tailwind',
@@ -109,11 +117,44 @@ INSTALLED_APPS = [
     'styling',
 
     #first party
-    'user',
+    'user.apps.UserConfig', # custom user app
     'blog',
     'inquiry',
     'transaction',
 ]
+
+ALLAUTH_UI_THEME = "dark"
+ACCOUNT_USER_MODEL_USERNAME_FIELD = None
+ACCOUNT_USERNAME_REQUIRED = False
+ACCOUNT_AUTHENTICATION_METHOD = 'email'
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',
+    'allauth.account.auth_backends.AuthenticationBackend',
+]
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = env('SOCIAL_AUTH_GOOGLE_OAUTH2_KEY')
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = env('SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET')
+
+SOCIALACCOUNT_PROVIDERS = {
+    'google': {
+        'APP': {
+            'client_id': SOCIAL_AUTH_GOOGLE_OAUTH2_KEY,
+            'secret': SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET,
+            'key': ''
+        },
+        'SCOPE': [
+            'openid',
+            'profile',
+            'email',
+            'https://www.googleapis.com/auth/calendar',
+            'https://mail.google.com/' # Pour acceder à Gmail
+        ],
+        'AUTH_PARAMS': {
+            'access_type': 'offline',
+        }
+    }
+}
 
 if not DEBUG:
     INSTALLED_APPS += ['anymail'] 
@@ -124,7 +165,7 @@ ANALYTICS_TAG_ID = env('GOOGLE_ANALYTICS') # for analytics tag on frontend
 AUTH_USER_MODEL = "user.User" 
 
 LOGIN_URL = '/user/login/'
-LOGIN_REDIRECT_URL = '/'
+LOGIN_REDIRECT_URL = '/user/dashboard/'
 
 TAILWIND_APP_NAME = 'styling'
 
@@ -184,6 +225,8 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
+    'allauth.account.middleware.AccountMiddleware',
+
     'whitenoise.middleware.WhiteNoiseMiddleware', #whitenoise
     'django_browser_reload.middleware.BrowserReloadMiddleware', # reload
     'django_ratelimit.middleware.RatelimitMiddleware',
@@ -210,17 +253,18 @@ else:
     EMAIL_BACKEND = 'django.core.mail.backends.dummy.EmailBackend' # This is only for development
 
     # uncomment below for default production emailing
-    # EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # for production
+    EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend' # for production
 
-    # EMAIL_HOST = env('EMAIL_HOST') #eg: smtpout.secureserver.net
-    # EMAIL_PORT = 465
+    EMAIL_HOST = env('EMAIL_HOST') #eg: smtpout.secureserver.net
+    EMAIL_PORT = 465
 
-    # EMAIL_HOST_USER = env('EMAIL_HOST_USER') # eg: info@mail.com
-    # EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+    EMAIL_HOST_USER = env('EMAIL_HOST_USER') # eg: info@mail.com
+    EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
 
-    # DEFAULT_FROM_EMAIL = Address(display_name=env('EMAIL_HOST_USER'), addr_spec=EMAIL_HOST_USER)
-
-    # EMAIL_USE_SSL = True
+    DEFAULT_FROM_EMAIL = Address(display_name=env('EMAIL_HOST_USER'), addr_spec=EMAIL_HOST_USER)
+    # Nassim : testing with tls
+    EMAIL_USE_TLS = True
+    EMAIL_USE_SSL = False
 
     # uncomment below for ESP, read: https://dev.to/paul_freeman/adding-esp-to-supercharge-your-django-email-4jkp
 
@@ -265,20 +309,20 @@ WSGI_APPLICATION = 'project.wsgi.application'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
 if DEBUG:
-    # DATABASES = {
-    #     'default': {
-    #         'ENGINE': 'django.db.backends.sqlite3',
-    #         'NAME': BASE_DIR / 'db.sqlite3',
-    #     },
-    #     'OPTIONS': {
-    #         "timeout": 20,
-    #     }
-    # }
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+        },
+        'OPTIONS': {
+            "timeout": 20,
+        }
+    }
     # Nassim: Ill use postgres in development, so I can test the production settings
-    DATABASES  = {
-                    'default':dj_database_url.config(default=env('POSTGRES_URL')),   
-                }
-    DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
+    # DATABASES  = {
+    #                 'default':dj_database_url.config(default=env('POSTGRES_URL')),   
+    #             }
+    # DATABASES['default']['ENGINE'] = 'django.db.backends.postgresql_psycopg2'
 
 else:
     # DATABASES = {

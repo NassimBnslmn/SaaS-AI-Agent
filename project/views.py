@@ -12,6 +12,11 @@ from django_ratelimit.exceptions import Ratelimited
 
 from inquiry.models import Inquiry
 
+from allauth.socialaccount.providers.google.views import oauth2_login
+
+def redirect_to_google(request):
+    return oauth2_login(request)
+
 def rate_limiter_view(request, *args, **kwargs):
     return render(request, 'ratelimit.html', status=429)
 
