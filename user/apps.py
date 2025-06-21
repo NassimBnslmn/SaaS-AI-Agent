@@ -7,4 +7,4 @@ class UserConfig(AppConfig):
 
     def ready(self) -> None:
         from . import signals
-        super().ready()
+        return super().ready()
