@@ -155,6 +155,9 @@ SOCIALACCOUNT_PROVIDERS = {
         }
     }
 }
+# Pour que Django génère les URLs en HTTPS en prod
+SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
 
 if not DEBUG:
     INSTALLED_APPS += ['anymail'] 
