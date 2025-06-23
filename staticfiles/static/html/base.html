@@ -110,10 +110,10 @@
                         ">
                     
                 <a class="header-links" href="{% url "home" %}">
-                    About us
+                    Accueil
                 </a>
                 <a class="header-links" href="{% url "pricing" %}">
-                    Pricing
+                    Tarification
                 </a>
                 <a class="header-links" href="{% url "blogs" %}"
                         rel="noreferrer"
@@ -123,7 +123,7 @@
                 <a class="header-links" href="{% url "contact-us" %}"
                         rel="noreferrer"
                         >
-                    Contact us
+                    Contact
                 </a>
             </div>
             <div class="tw-flex tw-gap-[20px] tw-place-items-center tw-text-xl
@@ -138,12 +138,12 @@
                                                 hover:!tw-bg-black hover:!tw-text-white
                                                 tw-duration-[0.3s] tw-transition-colors
                                                 ">
-                        Login
+                        Se connecter
                     </a>
-                    <a href="{% url "signup" %}" class="btn !tw-p-2 hover:tw-scale-[1.05] tw-duration-[0.3s]">Signup</a>
+                    <a href="{% url "signup" %}" class="btn !tw-p-2 hover:tw-scale-[1.05] tw-duration-[0.3s]">S'inscrire</a>
                 {% else %}
-                    <a href="" class="!tw-p-2">
-                        Go to dashboard
+                    <a href="{% url 'dashboard' %}" class="!tw-p-2">
+                        Dashboard
                         <i class="bi bi-arrow-right"></i>
                     </a>    
                 {% endif %}
@@ -173,11 +173,11 @@
             <img src="{% static "assets/logos/logo1.png" %}" 
                 alt="logo"  class="tw-max-w-[150px] max-md:tw-max-w-[120px]">
             <div>
-                2 Lord Edward St,   
+                   
+                
+                Marseille,
                 <br>
-                D02 P634,
-                <br>
-                United States
+                France
             </div>
             <div class="tw-mt-3 tw-font-semibold tw-text-lg">
                 Follow us
@@ -202,9 +202,9 @@
                 Resources
             </h2>
             <div class=" tw-flex tw-flex-col tw-gap-3 max-md:tw-text-sm">
-                <a href="{% url "home" %}" class="footer-link">About us</a>
+                <a href="{% url "home" %}" class="footer-link">Accueil</a>
                 <a href="" class="footer-link">FAQ</a>
-                <a href="{% url "contact-us" %}" class="footer-link">Contact Us</a>
+                <a href="{% url "contact-us" %}" class="footer-link">Contactez Nous</a>
                 <a href="" class="footer-link">Privacy policy</a>
             </div>
 
