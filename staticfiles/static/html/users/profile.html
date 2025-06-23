@@ -1,0 +1,58 @@
+{% extends "users/base_user.html" %}
+{% load static %}
+
+{% block title %}Mon Profil{% endblock %}
+{% block description %}Modifiez vos informations personnelles{% endblock %}
+
+{% block content %}
+{% if messages %}
+  {% for message in messages %}
+    <div class="tw-p-4 tw-rounded-md tw-shadow-sm tw-text-sm
+                {% if message.tags == 'success' %}
+                    tw-bg-success-light tw-text-success-dark
+                {% elif message.tags == 'error' %}
+                    tw-bg-error-light tw-text-error-dark
+                {% endif %}">
+        {{ message }}
+    </div>
+  {% endfor %}
+  <br>
+{% endif %}
+
+<div class="tw-max-w-xl tw-mx-auto tw-p-6 tw-bg-gray-700 tw-text-white tw-rounded-md tw-shadow-md">
+    <h1 class="tw-text-3xl tw-font-semibold tw-mb-6">Mon Profil</h1>
+
+    <form method="POST" class="tw-flex tw-flex-col tw-gap-4" action="{% url 'user-profile' %}">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+
+        <div>
+            {{ form.phone_number.label_tag }}<br>
+            {{ form.phone_number}}
+            {{ form.phone_number.errors }}
+        </div>
+
+        <div>
+            {{ form.company_name.label_tag }}<br>
+            {{ form.company_name}}
+            {{ form.company_name.errors }}
+        </div>
+
+        <div>
+            {{ form.activity_area.label_tag }}<br>
+            {{ form.activity_area}}
+            {{ form.activity_area.errors }}
+        </div>
+
+        <div>
+            {{ form.prompt_personalization.label_tag }}<br>
+            {{ form.prompt_personalization }}
+            {{ form.prompt_personalization.errors }}
+        </div>
+
+        <button type="submit" class="tw-w-auto tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-py-2 tw-rounded-md tw-mt-4">
+            Enregistrer
+        </button>
+    </form>
+</div>
+{% endblock %}

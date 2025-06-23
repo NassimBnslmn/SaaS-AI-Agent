@@ -18,25 +18,69 @@
   <body class="tw-min-h-screen tw-flex tw-bg-gray-900 tw-text-white tw-font-sans">
 
     <!-- Sidebar -->
-    <aside class="tw-w-64 tw-bg-gray-800 tw-h-screen tw-flex-shrink-0 tw-flex tw-flex-col tw-shadow-lg">
+    <aside class="tw-fixed tw-top-0 tw-left-0 tw-w-64 tw-bg-gray-800 tw-h-screen tw-flex-shrink-0 tw-flex tw-flex-col tw-shadow-lg z-40">
       <div class="tw-p-6 tw-text-2xl tw-font-bold tw-text-white border-b border-gray-700">
         Mon Espace
       </div>
+
+      <!-- Workflow status -->
+      <div class="tw-px-6 tw-py-4 tw-mb-4 tw-rounded tw-bg-gray-700 tw-text-white tw-font-semibold tw-text-center">
+        {% if user.workflow_status == 'pending' %}
+          <span class="tw-bg-yellow-400 tw-text-gray-900 tw-px-2 tw-py-1 tw-rounded-full">En Attente</span>
+        {% elif user.workflow_status == 'info_needed' %}
+          <span class="tw-bg-orange-500 tw-text-white tw-px-2 tw-py-1 tw-rounded-full">Manque d'info</span>
+        {% elif user.workflow_status == 'active' %}
+          <span class="tw-bg-green-500 tw-text-white tw-px-2 tw-py-1 tw-rounded-full">Actif</span>
+        {% elif user.workflow_status == 'awaiting_payment' %}
+          <span class="tw-bg-indigo-500 tw-text-white tw-px-2 tw-py-1 tw-rounded-full">En attente de paiement</span>
+        {% elif user.workflow_status == 'failed' %}
+          <span class="tw-bg-red-600 tw-text-white tw-px-2 tw-py-1 tw-rounded-full">Échoué</span>
+        {% else %}
+          <span class="tw-bg-gray-500 tw-text-white tw-px-2 tw-py-1 tw-rounded-full">Inconnu</span>
+        {% endif %}
+      </div>
+
       <nav class="tw-flex-1 tw-p-4 tw-space-y-2">
         <a href="{% url 'dashboard' %}" class="tw-block tw-py-2 tw-px-4 tw-rounded hover:tw-bg-gray-700">📊 Dashboard</a>
+        <a href="{% url 'user-profile' %}" class="tw-block tw-py-2 tw-px-4 tw-rounded hover:tw-bg-gray-700">👤 Profile</a>
         <a href="" class="tw-block tw-py-2 tw-px-4 tw-rounded hover:tw-bg-gray-700">⚙️ Paramètres</a>
         <a href="{% url 'subscription-plan' %}" class="tw-block tw-py-2 tw-px-4 tw-rounded hover:tw-bg-gray-700">💳 Abonnement</a>
         <a href="" class="tw-block tw-py-2 tw-px-4 tw-rounded hover:tw-bg-gray-700">📚 Base de connaissances</a>
       </nav>
+
       <div class="tw-p-4">
         <a href="{% url 'logout' %}" class="tw-block tw-text-red-500 hover:tw-underline">Se déconnecter</a>
       </div>
     </aside>
-
     <!-- Main content -->
-    <main class="tw-flex-1 tw-p-8 tw-bg-gray-900">
+    <main class="tw-ml-64 tw-flex-1 tw-p-8 tw-bg-gray-900">
       {% block content %}{% endblock %}
     </main>
 
   </body>
+  {% comment %} <script src="{% static "./js/base.js" %}"></script> {% endcomment %}
+  <script>
+      // Timezone settings
+      const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone; // e.g. "America/New_York"
+      document.cookie = "user_timezone=" + timezone;
+    </script>
+    {% comment %} <script src="https://unpkg.com/quill-paste-smart@latest/dist/quill-paste-smart.js"></script> {% endcomment %}
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.21/lodash.min.js" integrity="sha512-WFN04846sdKMIP5LKNphMaWzU7YpMyCU245etK3g/2ARYbPK9Ub18eG+ljU96qKRCWh+quCY7yefSmlkQw1ANQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/browser-image-compression@2.0.1/dist/browser-image-compression.js"></script>
+
+    <script>
+        const STATIC_URL = "{% settings_value 'STATIC_URL' %}" 
+    </script>
+
+    <script src="{% static './js/utils/elements.js' %}"></script>
+    <script src="{% static './js/utils/common.js' %}"></script>
+    <script src="{% static './js/utils/images.js' %}"></script>
+    <script src="{% static './js/utils/constants.js' %}"></script>
+
+    <script src="{% static './js/base.js' %}"></script>
+
+    {% block scripts %}{% endblock scripts %}
+
+
 </html>
