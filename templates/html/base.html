@@ -138,11 +138,11 @@
                                                 hover:!tw-bg-black hover:!tw-text-white
                                                 tw-duration-[0.3s] tw-transition-colors
                                                 ">
-                        Login
+                        Se connecter
                     </a>
-                    <a href="{% url "signup" %}" class="btn !tw-p-2 hover:tw-scale-[1.05] tw-duration-[0.3s]">Signup</a>
+                    <a href="{% url "signup" %}" class="btn !tw-p-2 hover:tw-scale-[1.05] tw-duration-[0.3s]">S'inscrire</a>
                 {% else %}
-                    <a href="" class="!tw-p-2">
+                    <a href="{% url 'dashboard' %}" class="!tw-p-2">
                         Go to dashboard
                         <i class="bi bi-arrow-right"></i>
                     </a>    

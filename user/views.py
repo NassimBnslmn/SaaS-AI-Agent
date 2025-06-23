@@ -26,7 +26,8 @@ def dashboard_view(request):
     """
         Render the dashboard view for authenticated users.
     """
-
+    if request.user.is_superuser:
+        return redirect(reverse('admin:index'))
     return render(request, 'html/users/dashboard.html', context={
         'user': request.user
     })
