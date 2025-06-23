@@ -21,6 +21,7 @@ def update_workflow_status(sender, instance, created, **kwargs):
     has_phone = bool(instance.phone_number)
     has_activity = bool(instance.activity_area)
     has_plan = Transaction.objects.filter(user=instance, plan__isnull=False).exists()
+    telegram_token = bool(instance.telegram_token)
     # Si pas de plan, on crée une transaction avec le plan gratuit (ex: Plan gratuit id=1)
     if not has_plan:
         try:
@@ -32,10 +33,12 @@ def update_workflow_status(sender, instance, created, **kwargs):
             Transaction.objects.create(user=instance, plan=free_plan, subscription_status=1)  # status active
             has_plan = True  # on met à jour la variable pour la suite
 
-    if has_phone and has_activity and has_plan:
+    if has_phone and has_activity and has_plan and telegram_token:
         new_status = 'active'
     elif not has_phone or not has_activity:
         new_status = 'info_needed'
+    elif not telegram_token:
+        new_status = 'pending'
     else:
         new_status = 'awaiting_payment'
 
