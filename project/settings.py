@@ -148,7 +148,7 @@ SOCIALACCOUNT_PROVIDERS = {
             'profile',
             'email',
             'https://www.googleapis.com/auth/calendar',
-            'https://mail.google.com/' # Pour acceder à Gmail
+            'https://www.googleapis.com/auth/spreadsheets'
         ],
         'AUTH_PARAMS': {
             'access_type': 'offline',
