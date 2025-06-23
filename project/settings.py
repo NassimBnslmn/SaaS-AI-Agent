@@ -152,12 +152,17 @@ SOCIALACCOUNT_PROVIDERS = {
         ],
         'AUTH_PARAMS': {
             'access_type': 'offline',
+            'prompt': 'consent',  # Force Google à renvoyer un refresh_token
         }
     }
 }
-# Pour que Django génère les URLs en HTTPS en prod
-SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
-ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+if not DEBUG:
+    # Pour que Django génère les URLs en HTTPS en prod
+    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    ACCOUNT_DEFAULT_HTTP_PROTOCOL = 'https'
+
+SOCIALACCOUNT_ADAPTER = 'user.adapters.MySocialAccountAdapter'
+
 
 if not DEBUG:
     INSTALLED_APPS += ['anymail'] 

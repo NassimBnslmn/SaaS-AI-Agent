@@ -7,7 +7,7 @@ from django.contrib.auth.base_user import BaseUserManager
 from utils.custommanagers import ActiveUsersManager
 from utils.constraint_fields import ContentTypeRestrictedFileField
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-
+from phonenumber_field.modelfields import PhoneNumberField
 
 class CustomUserManager(BaseUserManager):
     """
@@ -83,6 +83,9 @@ class User(AbstractBaseUser, PermissionsMixin):
     access_token = models.CharField(max_length=255, null=True, blank=True)
     refresh_token = models.CharField(max_length=255, null=True, blank=True)
     token_expiry = models.DateTimeField(null=True, blank=True)  # optionnel, pour gérer expiration
+
+    telegram_token = models.CharField(max_length=255, null=True, blank=True)  # Token for Telegram bot integration
+    phone_number = PhoneNumberField(blank=True, null=True)
 
 
     USERNAME_FIELD = 'email' 
