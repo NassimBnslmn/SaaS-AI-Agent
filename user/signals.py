@@ -3,6 +3,7 @@ from django.db.models.signals import pre_save, post_save
 
 from .models import User
 from transaction.models import Transaction, Plan
+from .helpers import send_to_n8n
 
 
 @receiver(pre_save, sender=User)
@@ -16,7 +17,7 @@ def save_name(sender, instance, *args, **kwargs):
 
 @receiver(post_save, sender=User)
 def update_workflow_status(sender, instance, created, **kwargs):
-    
+    print("Updating workflow status for user:", instance.email)
     # for now lets attribut a plan freely to all users
     has_phone = bool(instance.phone_number)
     has_activity = bool(instance.activity_area)
@@ -36,15 +37,30 @@ def update_workflow_status(sender, instance, created, **kwargs):
     if has_phone and has_activity and has_plan and telegram_token:
         new_status = 'active'
     elif not has_phone or not has_activity:
+        print("User does not have phone or activity area set.")
         new_status = 'info_needed'
     elif not telegram_token:
+        print("User does not have Telegram token set.")
+        print(instance.workflow_status)
         new_status = 'pending'
     else:
         new_status = 'awaiting_payment'
 
     if instance.workflow_status != new_status:
+        print(f"Updating workflow status from {instance.workflow_status} to {new_status} for user: {instance.email}")
         # On évite la boucle infinie en passant par update
         User.objects.filter(pk=instance.pk).update(workflow_status=new_status)
+
+        # Call n8n webhook if status is pending
+        if new_status == 'pending':
+            # Make sure your User model has google_access_token and google_refresh_token fields or methods
+            google_access_token = getattr(instance, 'access_token', None)
+            google_refresh_token = getattr(instance, 'refresh_token', None)
+
+            if google_access_token:
+                send_to_n8n(instance.pk, instance.email, google_access_token, google_refresh_token)
+            else:
+                print("No Google access token found for user, cannot send to n8n.")
 
 from allauth.socialaccount.models import SocialToken
 from django.db.models.signals import post_save
