@@ -51,7 +51,22 @@ class CustomUserManager(BaseUserManager):
 
         return user
 
+WORKFLOW_STATUS_CHOICES = (
+    ('pending', 'En Attente'),
+    ('info_needed', 'Manque d\'information'),
+    ('active', 'Actif'),
+    ('awaiting_payment', 'En attente de paiement'),
+    ('failed', 'Echoué'),
+)
 
+ACTIVITY_AREA_CHOICES = (
+    ('peinture', 'Peinture'),
+    ('toiture', 'Toiture'),
+    ('Electricité', 'Electricité'),
+    ('plomberie', 'Plomberie'),
+    ('maçonnerie', 'Maçonnerie'),
+    ('autre', 'Autre'),
+)
 # Create your models here.
 class User(AbstractBaseUser, PermissionsMixin):
 
@@ -86,6 +101,31 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     telegram_token = models.CharField(max_length=255, null=True, blank=True)  # Token for Telegram bot integration
     phone_number = PhoneNumberField(blank=True, null=True)
+
+    workflow_status = models.CharField(
+        max_length=20,
+        choices=WORKFLOW_STATUS_CHOICES,
+        default='info_needed',
+        help_text="Status of the user's workflow"
+    )
+
+    prompt_personalization = models.TextField(
+        null=True, blank=True,
+        help_text="Personalized prompt for the user, used in AI interactions"
+    )
+
+    activity_area = models.CharField(
+        max_length=20,
+        choices=ACTIVITY_AREA_CHOICES,
+        blank=True, null=True,
+        help_text="Area of activity for the user, used for categorization"
+    )
+
+    company_name = models.CharField(
+        max_length=100,
+        null=True, blank=True,
+        help_text="Name of the user's company, if applicable"
+    )
 
 
     USERNAME_FIELD = 'email' 

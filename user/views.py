@@ -18,7 +18,7 @@ from django.contrib.auth.decorators import login_required
 from django.http import Http404
 
 from .models import User
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, UserProfileForm
 from utils.token_generator import send_token
 
 @login_required
@@ -32,6 +32,24 @@ def dashboard_view(request):
     })
 
 from transaction.models import Transaction, SUBSCRIPTION_STATUS, Plan
+
+@login_required
+def profile_view(request):
+    user = request.user
+
+    if request.method == 'POST':
+        form = UserProfileForm(request.POST, instance=user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Profil mis à jour avec succès.')
+            return render(request, 'html/users/profile.html', {'form': form})
+        else:
+            messages.error(request, 'Erreur lors de la mise à jour du profil.')
+    else:
+        form = UserProfileForm(instance=user)
+
+    return render(request, 'html/users/profile.html', {'form': form})
+
 
 @login_required
 def subscription_view(request):

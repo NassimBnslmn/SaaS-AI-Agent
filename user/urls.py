@@ -1,7 +1,7 @@
 from django.urls import path
 
 from .views import (login_view, signup_view, verify_email,
-                    verification_alert, verification_resend, logout_view, dashboard_view, subscription_view,
+                    verification_alert, verification_resend, logout_view, dashboard_view, subscription_view, profile_view,
                     ResetPasswordView
                     )
 from django.contrib.auth import views as auth_views
@@ -13,6 +13,7 @@ urlpatterns = [
     path('signup/', signup_view, name='signup'),
     path('email/verify/', verify_email, name='verify-email'),
     path('dashboard/', dashboard_view, name='dashboard'),
+    path('profile/', profile_view, name='user-profile'),
     path('subscription/', subscription_view, name='subscription-plan'),
     path('email/verification/resend/', verification_resend, name='resend-verification'),
     path('email/verification-alert/', verification_alert, name='verification-alert'),

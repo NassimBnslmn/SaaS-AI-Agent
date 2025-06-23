@@ -2,6 +2,7 @@ from django.dispatch import receiver
 from django.db.models.signals import pre_save
 
 from .models import User
+from transaction.models import Transaction
 
 
 @receiver(pre_save, sender=User)
@@ -12,6 +13,17 @@ def save_name(sender, instance, *args, **kwargs):
     if not instance.name:
         instance.name = name.replace('.', ' ').strip().capitalize()[:25] #eg: paul@email.com -> Paul
 
+    has_phone = bool(instance.phone_number)
+    has_activity = bool(instance.activity_area)
+    has_plan = Transaction.objects.filter(user=instance, plan__isnull=False).exists()
+
+    if has_phone and has_activity and has_plan:
+        instance.workflow_status = 'active'
+    else:
+        if not has_phone or not has_activity:
+            instance.workflow_status = 'info_needed'
+        elif not has_plan:
+            instance.workflow_status = 'awaiting_payment'
 
 from allauth.socialaccount.models import SocialToken
 from django.db.models.signals import post_save

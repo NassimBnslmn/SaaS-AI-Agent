@@ -49,7 +49,20 @@ module.exports = {
         // '../../**/*.py'
     ],
     theme: {
-        extend: {},
+        extend: {
+        colors: {
+            success: {
+            light: '#d1fae5',
+            DEFAULT: '#10b981',
+            dark: '#065f46',
+            },
+            error: {
+            light: '#fee2e2',
+            DEFAULT: '#ef4444',
+            dark: '#991b1b',
+            },
+        },
+        },
     },
     plugins: [
         /**
