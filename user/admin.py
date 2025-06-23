@@ -45,8 +45,8 @@ class CustomUserAdmin(UserAdmin, ModelAdmin):
     form = CustomUserChangeForm
     add_form = CustomUserCreationForm
 
-    list_display = ['email', 'name', 'id', 'is_active', 'is_staff', 'is_admin']
-    list_filter = ['date_joined', 'last_login', 'is_active', 'is_staff', 'is_admin']
+    list_display = ['email', 'name', 'id', 'is_active', 'is_staff', 'is_admin', 'workflow_status']
+    list_filter = ['date_joined', 'last_login', 'is_active', 'is_staff', 'is_admin', 'workflow_status']
 
     ordering = ['-date_joined']
     readonly_fields = ['id', 'date_joined', 'last_login']
@@ -55,7 +55,7 @@ class CustomUserAdmin(UserAdmin, ModelAdmin):
         ('User details', {'fields': ('id', 'email', 'name',  "dp", 
                                      'date_joined', 
                                      'password')}), # displays hashed password
-        ('Status', {'fields': ('is_active', 'is_staff', 'is_admin', 'is_superuser')}),
+        ('Status', {'fields': ('is_active', 'is_staff', 'is_admin', 'is_superuser', 'workflow_status')}),
         ('Authorization groups', {'fields': ('groups', 'user_permissions')}),
         ('Login', {'fields': ('last_login', )}),
     )

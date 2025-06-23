@@ -1,8 +1,8 @@
 from django.dispatch import receiver
-from django.db.models.signals import pre_save
+from django.db.models.signals import pre_save, post_save
 
 from .models import User
-from transaction.models import Transaction
+from transaction.models import Transaction, Plan
 
 
 @receiver(pre_save, sender=User)
@@ -13,17 +13,35 @@ def save_name(sender, instance, *args, **kwargs):
     if not instance.name:
         instance.name = name.replace('.', ' ').strip().capitalize()[:25] #eg: paul@email.com -> Paul
 
+
+@receiver(post_save, sender=User)
+def update_workflow_status(sender, instance, created, **kwargs):
+    
+    # for now lets attribut a plan freely to all users
     has_phone = bool(instance.phone_number)
     has_activity = bool(instance.activity_area)
     has_plan = Transaction.objects.filter(user=instance, plan__isnull=False).exists()
+    # Si pas de plan, on crée une transaction avec le plan gratuit (ex: Plan gratuit id=1)
+    if not has_plan:
+        try:
+            free_plan = Plan.objects.get(name="Starters")  # ou utiliser un autre critère pour le plan gratuit
+        except Plan.DoesNotExist:
+            free_plan = None
+
+        if free_plan:
+            Transaction.objects.create(user=instance, plan=free_plan, subscription_status=1)  # status active
+            has_plan = True  # on met à jour la variable pour la suite
 
     if has_phone and has_activity and has_plan:
-        instance.workflow_status = 'active'
+        new_status = 'active'
+    elif not has_phone or not has_activity:
+        new_status = 'info_needed'
     else:
-        if not has_phone or not has_activity:
-            instance.workflow_status = 'info_needed'
-        elif not has_plan:
-            instance.workflow_status = 'awaiting_payment'
+        new_status = 'awaiting_payment'
+
+    if instance.workflow_status != new_status:
+        # On évite la boucle infinie en passant par update
+        User.objects.filter(pk=instance.pk).update(workflow_status=new_status)
 
 from allauth.socialaccount.models import SocialToken
 from django.db.models.signals import post_save

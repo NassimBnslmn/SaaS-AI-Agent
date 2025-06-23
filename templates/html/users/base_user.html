@@ -25,7 +25,6 @@
 
       <!-- Workflow status -->
       <div class="tw-px-6 tw-py-4 tw-mb-4 tw-rounded tw-bg-gray-700 tw-text-white tw-font-semibold tw-text-center">
-        Statut : 
         {% if user.workflow_status == 'pending' %}
           <span class="tw-bg-yellow-400 tw-text-gray-900 tw-px-2 tw-py-1 tw-rounded-full">En Attente</span>
         {% elif user.workflow_status == 'info_needed' %}
