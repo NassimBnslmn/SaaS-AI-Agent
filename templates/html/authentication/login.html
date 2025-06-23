@@ -29,18 +29,19 @@
                 <div class="tw-text-3xl tw-mb-[5%] tw-m-2">
                     Login
                 </div>
-             
+                                 Please use the google login for now.
+
                 <div id="login-alert" class="{% if not error%} tw-hidden {% endif %}
                                     error-container" role="alert" >
                     {{error}}
                 </div>
                 <div class="tw-flex tw-w-full">
-                    <input type="text" class="input tw-w-full"
+                    <input disabled type="text" class="input tw-w-full"
                         placeholder="email" name="email" on maxlength="2000" autofocus>
                 </div>
                 
                 <div class="tw-flex tw-w-full input !tw-p-[2px]">
-                    <input type="password" class="tw-w-full tw-p-[8px] tw-border-none tw-outline-none"
+                    <input disabled type="password" class="tw-w-full tw-p-[8px] tw-border-none tw-outline-none"
                         placeholder="password" name="password" maxlength="30" >
                 </div>
                 
@@ -53,7 +54,12 @@
                 <div>
                     Don't have an account? <a href="{% url "signup" %}" class="tw-text-blue-500">Signup</a>
                 </div>
-<a href="{% provider_login_url 'google' process='login' %}">Se connecter avec Google</a>
+                <a href="{% provider_login_url 'google' process='login' %}" 
+                class="tw-inline-flex tw-items-center tw-gap-2 tw-border tw-border-gray-300 tw-text-gray-800 tw-font-semibold tw-px-5 tw-py-2 tw-rounded-md
+                        hover:tw-bg-gray-100 tw-transition-colors tw-duration-300">
+                    <i class="bi bi-google tw-text-xl"></i>
+                    Se connecter avec Google
+                </a>
         </form>
 
 
